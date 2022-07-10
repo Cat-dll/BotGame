@@ -1,6 +1,8 @@
 package org.catdll.botgame.gfx.gl;
 
-public interface IGLObject
+import org.catdll.botgame.*;
+
+public interface IGLObject extends IDisposable
 {
     int getId();
 }

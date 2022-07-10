@@ -1,10 +1,12 @@
 package org.catdll.botgame.gfx.gl.shader;
 
+import java.io.*;
+
 import org.catdll.botgame.gfx.gl.IGLObject;
+
 import org.lwjgl.opengl.GL40;
 import static org.lwjgl.opengl.GL40.*;
 
-import java.io.*;
 
 public class Shader implements IGLObject
 {
@@ -48,12 +50,14 @@ public class Shader implements IGLObject
         return shader;
     }
 
+    @Override
     public void dispose()
     {
         this.id = GL_NONE;
         GL40.glDeleteShader(this.id);
     }
 
+    @Override
     public int getId()
     {
         return this.id;

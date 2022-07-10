@@ -14,7 +14,7 @@ public class VertexAttributes implements Iterable<VertexAttribute>
 
     public VertexAttributes()
     {
-        this.attributes = new ArrayList<VertexAttribute>();
+        this.attributes = new ArrayList<>();
         this.isVertexSizeDirty = true;
         this.vertexSize = 0;
     }
@@ -39,21 +39,20 @@ public class VertexAttributes implements Iterable<VertexAttribute>
 
     public int getVertexSize()
     {
-        int size = 0;
-
         if (this.isVertexSizeDirty)
         {
+            vertexSize = 0;
             for (VertexAttribute attribute : this)
-                size += attribute.getSize();
+                vertexSize += attribute.getSize();
             this.isVertexSizeDirty = false;
         }
 
-        return size;
+        return vertexSize;
     }
 
     @Override
     public Iterator<VertexAttribute> iterator() {
-        return new Iterator<VertexAttribute>() {
+        return new Iterator<>() {
             private int currentIdx = 0;
 
             @Override

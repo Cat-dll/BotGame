@@ -1,10 +1,9 @@
 package org.catdll.botgame;
 
 import org.lwjgl.opengl.GL;
-
 import static org.lwjgl.glfw.GLFW.*;
-
 import static org.lwjgl.system.MemoryUtil.*;
+
 public class GameWindow
 {
     private long window_id;
@@ -46,7 +45,7 @@ public class GameWindow
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     }
 
@@ -55,7 +54,7 @@ public class GameWindow
         glfwSetErrorCallback((err, msgPtr) -> {
             String msg = memASCIISafe(msgPtr);
             if (msg != null)
-                throw new RuntimeException("[" + err + "]" + " GLFW Error Callback: " + msg);
+                throw new RuntimeException(String.format("[%d] GLFW Error Callback: %s", err, msg));
         });
 
         glfwSetWindowCloseCallback(this.window_id, (close) -> isClose = true);
@@ -92,13 +91,13 @@ public class GameWindow
     public void setWidth(int width)
     {
         this.width = width;
-        glfwSetWindowSize(this.window_id, width, this.getHeight());
+        glfwSetWindowSize(this.window_id, this.width, this.height);
     }
 
     public void setHeight(int height)
     {
         this.height = height;
-        glfwSetWindowSize(this.window_id, this.getWidth(), height);
+        glfwSetWindowSize(this.window_id, this.width, this.height);
     }
 
     public boolean isClose()
@@ -120,6 +119,4 @@ public class GameWindow
     {
         return this.title;
     }
-
-    public long getId() { return this.window_id; }
 }

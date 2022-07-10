@@ -1,6 +1,6 @@
 package org.catdll.botgame;
 
-public interface IScreen
+public interface IScreen extends IDisposable
 {
     void tick();
 

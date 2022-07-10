@@ -1,14 +1,15 @@
 package org.catdll.botgame.gfx.gl;
 
 import java.io.*;
+import java.nio.*;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;
-import java.nio.*;
-
 import static org.lwjgl.opengl.GL40.*;
+
 
 // TODO: Implements IBindable
 public class Texture

@@ -1,10 +1,9 @@
 package org.catdll.botgame.gfx.gl.shader;
 
-import static org.lwjgl.opengl.GL40.*;
-
 import org.catdll.botgame.gfx.gl.IBindable;
-import org.catdll.botgame.gfx.gl.IGLObject;
+
 import org.lwjgl.opengl.*;
+import static org.lwjgl.opengl.GL40.*;
 
 public class ShaderProgram implements IBindable
 {
@@ -12,9 +11,9 @@ public class ShaderProgram implements IBindable
 
     private int id;
 
-    private Shader vertexShader;
+    private final Shader vertexShader;
 
-    private Shader fragmentShader;
+    private final Shader fragmentShader;
 
     public ShaderProgram(String vertexShaderSource, String fragmentShaderSource)
     {
@@ -95,6 +94,7 @@ public class ShaderProgram implements IBindable
         GL40.glDetachShader(this.id, shader.getId());
     }
 
+    @Override
     public void dispose()
     {
         this.unbind();

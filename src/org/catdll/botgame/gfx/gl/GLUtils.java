@@ -1,33 +1,24 @@
 package org.catdll.botgame.gfx.gl;
 
 import org.lwjgl.opengl.GL40;
+import static org.lwjgl.opengl.GL40.*;
 
 import java.nio.*;
 
-import static org.lwjgl.opengl.GL40.*;
 
 public class GLUtils
 {
     public static int getTypeSize(int type)
     {
-        switch (type)
+        return switch (type)
         {
             // TODO: Add more GL types
-            case GL_BYTE:
-            case GL_UNSIGNED_BYTE:
-                return Byte.BYTES;
-            case GL_SHORT:
-            case GL_UNSIGNED_SHORT:
-                return Short.BYTES;
-            case GL_UNSIGNED_INT:
-            case GL_INT:
-            case GL_FLOAT:
-                return Integer.BYTES;
-            case GL_DOUBLE:
-                return Double.BYTES;
-            default:
-                throw new IllegalStateException("Cannot get OpenGL type size! Invalid type specified!");
-        }
+            case GL_BYTE, GL_UNSIGNED_BYTE -> Byte.BYTES;
+            case GL_SHORT, GL_UNSIGNED_SHORT -> Short.BYTES;
+            case GL_UNSIGNED_INT, GL_INT, GL_FLOAT -> Integer.BYTES;
+            case GL_DOUBLE -> Double.BYTES;
+            default -> throw new IllegalStateException("Cannot get OpenGL type size! Invalid type specified!");
+        };
     }
 
     public static void bufferSubData(int target, int offset, Buffer data)
@@ -44,6 +35,6 @@ public class GLUtils
         }
 
         if (glGetError() != GL_NO_ERROR)
-            throw new RuntimeException("An error was occured when allocate buffer data!");
+            throw new RuntimeException("An error was occurred when allocate buffer data!");
     }
 }

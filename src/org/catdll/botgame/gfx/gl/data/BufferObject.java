@@ -1,21 +1,22 @@
 package org.catdll.botgame.gfx.gl.data;
 
-import static org.lwjgl.opengl.GL40.*;
+import java.nio.*;
 
 import org.catdll.botgame.gfx.gl.GLUtils;
 import org.catdll.botgame.gfx.gl.IBindable;
+
 import org.lwjgl.opengl.*;
-import java.nio.*;
+import static org.lwjgl.opengl.GL40.*;
 
 public class BufferObject implements IBindable
 {
     private static int currentBindBuffer;
 
+    private final int size;
+
+    private final BufferType type;
+
     private int id;
-
-    private int size;
-
-    private BufferType type;
 
     public BufferObject(BufferType type)
     {
@@ -49,9 +50,13 @@ public class BufferObject implements IBindable
         if (offset < 0)
             throw new IllegalArgumentException("Cannot copy data in the buffer with a negative offset!");
 
+        if (data.remaining() + offset > this.size)
+            throw new IndexOutOfBoundsException("The data to be copied is out of bound of the buffer!");
+
         GLUtils.bufferSubData(this.type.getId(), offset, data);
     }
 
+    @Override
     public void dispose()
     {
         this.unbind();

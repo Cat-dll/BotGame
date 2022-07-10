@@ -1,6 +1,7 @@
 package org.catdll.botgame.gfx.gl.data;
 
 import org.catdll.botgame.gfx.gl.IGLObject;
+
 import org.lwjgl.opengl.*;
 import static org.lwjgl.opengl.GL40.*;
 
@@ -77,6 +78,7 @@ public class VertexArray implements IGLObject
         this.isBind = false;
     }
 
+    @Override
     public void dispose()
     {
         this.unbind();

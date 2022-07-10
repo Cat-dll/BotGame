@@ -1,6 +1,8 @@
 package org.catdll.botgame.gfx.gl;
 
-public interface IType extends IGLObject
+public interface IType
 {
     String toString();
+
+    int getId();
 }
