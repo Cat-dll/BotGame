@@ -1,14 +1,12 @@
 package org.catdll.botgame.gfx.gl;
 
-import java.io.*;
 import java.nio.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.opengl.GL40.*;
+
+import org.lwjgl.stb.*;
 
 
 // TODO: Implements IBindable
@@ -27,7 +25,7 @@ public class Texture
 
         this.id = GL40.glGenTextures();
         this.bind();
-        GL40.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        GL40.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         GL40.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         GL40.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         GL40.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -49,41 +47,25 @@ public class Texture
     {
         Texture texture;
 
-        try
+        try (MemoryStack stack = MemoryStack.stackPush())
         {
-            File file = new File(path);
-            BufferedImage image = ImageIO.read(file);
+            ByteBuffer data;
 
-            int w = image.getWidth();
-            int h = image.getHeight();
+            IntBuffer w = stack.ints(0);
+            IntBuffer h = stack.ints(0);
+            IntBuffer channels = stack.ints(0);
+            data = STBImage.stbi_load(path, w, h, channels, 0);
 
-            ByteBuffer rawBuffer = MemoryUtil.memAlloc(w * h * 4);
-            int[] pixels = image.getRGB(0, 0, w, h, null, 0, w);
-
-            // NOTE(catdll): Convert ARGB to RGBA
-            for (int x = 0; x < w; x++)
-            {
-                for (int y = 0; y < h; y++)
-                {
-                    int idx = y * w + x;
-                    rawBuffer.put((byte)((pixels[idx] >> 16) & 0xFF));
-                    rawBuffer.put((byte)((pixels[idx] >> 8) & 0xFF));
-                    rawBuffer.put((byte)((pixels[idx]) & 0xFF));
-                    rawBuffer.put((byte)((pixels[idx] >> 24) & 0xFF));
-                }
-            }
-
-            rawBuffer.flip();
-
-            texture = new Texture(rawBuffer, image.getWidth(), image.getHeight());
+            texture = new Texture(data, w.get(0), h.get(0));
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
-            throw new RuntimeException(ex.getMessage());
+            ex.printStackTrace();
+            throw new RuntimeException("Cannot load " + path + "!");
         }
+
 
         return texture;
-
     }
 
     public void dispose()

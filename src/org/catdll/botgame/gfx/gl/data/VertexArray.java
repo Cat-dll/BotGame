@@ -1,11 +1,11 @@
 package org.catdll.botgame.gfx.gl.data;
 
-import org.catdll.botgame.gfx.gl.IGLObject;
+import org.catdll.botgame.gfx.gl.IBindable;
 
 import org.lwjgl.opengl.*;
 import static org.lwjgl.opengl.GL40.*;
 
-public class VertexArray implements IGLObject
+public class VertexArray implements IBindable
 {
     private int id;
 
@@ -62,7 +62,7 @@ public class VertexArray implements IGLObject
 
     public void bind()
     {
-        if (isBind)
+        if (this.isBind)
             return;
 
         GL40.glBindVertexArray(this.id);
@@ -71,11 +71,17 @@ public class VertexArray implements IGLObject
 
     public void unbind()
     {
-        if (!isBind)
+        if (!this.isBind)
             return;
 
-        GL40.glBindVertexArray(0);
+        GL40.glBindVertexArray(GL_NONE);
         this.isBind = false;
+    }
+
+    @Override
+    public boolean isBind()
+    {
+        return this.isBind;
     }
 
     @Override

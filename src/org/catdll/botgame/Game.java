@@ -1,6 +1,5 @@
 package org.catdll.botgame;
 
-import org.catdll.botgame.gfx.gl.*;
 import org.catdll.botgame.time.*;
 
 public class Game implements Runnable
@@ -17,15 +16,10 @@ public class Game implements Runnable
 
     public Time time;
 
-    private Texture texture;
-
     public void init()
     {
-       // this.window = new GameWindow("Pixel Survival", GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
-        //this.renderer = new Renderer(this.window, 256, 192);
         this.time = new Time();
         this.window = new GameWindow("Super Window", WINDOW_WIDTH, WINDOW_HEIGHT);
-        this.texture = Texture.loadTexture("res/texture/canyon_sheets.png");
     }
 
     @Override
@@ -52,7 +46,7 @@ public class Game implements Runnable
 
     public void tick()
     {
-        System.out.println("Tick!");
+
     }
 
     public void render()

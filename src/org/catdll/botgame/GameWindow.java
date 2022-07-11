@@ -119,4 +119,6 @@ public class GameWindow
     {
         return this.title;
     }
+
+    public long getId() { return this.window_id; }
 }

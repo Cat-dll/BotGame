@@ -2,6 +2,7 @@ package org.catdll.botgame.gfx.gl.data;
 
 import java.nio.*;
 
+import org.catdll.botgame.Utils;
 import org.catdll.botgame.gfx.gl.GLUtils;
 import org.catdll.botgame.gfx.gl.IBindable;
 
@@ -10,24 +11,25 @@ import static org.lwjgl.opengl.GL40.*;
 
 public class BufferObject implements IBindable
 {
-    private static int currentBindBuffer;
-
-    private final int size;
-
     private final BufferType type;
 
     private int id;
+
+    private int size;
+
+    private boolean isBind;
 
     public BufferObject(BufferType type)
     {
         this.id = GL40.glGenBuffers();
         this.size = 0;
         this.type = type;
+        this.isBind = false;
     }
 
     private void checkBinding()
     {
-        if (!this.isBind())
+        if (!isBind)
             throw new IllegalStateException("You must bind the buffer before operating on it!");
     }
 
@@ -41,6 +43,8 @@ public class BufferObject implements IBindable
         GL40.glBufferData(this.type.getId(), size, GL_DYNAMIC_DRAW);
         if (glGetError() != GL_NO_ERROR)
             throw new RuntimeException("An error was occurred when allocate buffer data!");
+
+        this.size = size;
     }
 
     public void setData(Buffer data, int offset)
@@ -50,7 +54,8 @@ public class BufferObject implements IBindable
         if (offset < 0)
             throw new IllegalArgumentException("Cannot copy data in the buffer with a negative offset!");
 
-        if (data.remaining() + offset > this.size)
+        int rawBufferSize = Utils.getBufferDataSize(data) * data.remaining();
+        if (rawBufferSize + offset > this.size)
             throw new IndexOutOfBoundsException("The data to be copied is out of bound of the buffer!");
 
         GLUtils.bufferSubData(this.type.getId(), offset, data);
@@ -68,33 +73,27 @@ public class BufferObject implements IBindable
     @Override
     public void bind()
     {
-        if (isBind())
+        if (this.isBind)
             return;
 
         GL40.glBindBuffer(this.type.getId(), this.id);
-        currentBindBuffer = this.id;
+        this.isBind = true;
     }
 
     @Override
     public void unbind()
     {
-        if (!isBind())
+        if (!this.isBind)
             return;
 
         GL40.glBindBuffer(this.type.getId(), GL_NONE);
-        currentBindBuffer = GL_NONE;
+        this.isBind = false;
     }
 
     @Override
     public boolean isBind()
     {
-        return this.id == currentBindBuffer;
-    }
-
-    @Override
-    public int getCurrentBind()
-    {
-        return currentBindBuffer;
+        return this.isBind;
     }
 
     @Override

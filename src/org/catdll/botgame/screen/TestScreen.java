@@ -2,19 +2,9 @@ package org.catdll.botgame.screen;
 
 import org.catdll.botgame.IScreen;
 
-import org.catdll.botgame.gfx.gl.*;
-import org.catdll.botgame.gfx.gl.data.*;
-
-import java.nio.Buffer;
-
+// NOTE: Sandbox class
 public class TestScreen implements IScreen
 {
-    public VertexArray vao;
-
-    public BufferObject vertex_buffer;
-
-    public BufferObject index_buffer;
-
     public TestScreen()
     {
 

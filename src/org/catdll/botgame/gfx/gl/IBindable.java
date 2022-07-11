@@ -7,6 +7,4 @@ public interface IBindable extends IGLObject
     void unbind();
 
     boolean isBind();
-
-    int getCurrentBind();
 }

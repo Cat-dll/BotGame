@@ -7,13 +7,13 @@ import static org.lwjgl.opengl.GL40.*;
 
 public class ShaderProgram implements IBindable
 {
-    private static int currentUseProgram = GL_NONE;
-
     private int id;
 
     private final Shader vertexShader;
 
     private final Shader fragmentShader;
+
+    private boolean isUse;
 
     public ShaderProgram(String vertexShaderSource, String fragmentShaderSource)
     {
@@ -28,11 +28,13 @@ public class ShaderProgram implements IBindable
         GL40.glLinkProgram(this.id);
         if (glGetProgrami(this.id, GL_LINK_STATUS) == GL_FALSE)
             throw new RuntimeException(GL40.glGetProgramInfoLog(this.id));
+
+        this.isUse = false;
     }
 
     private void checkIsUse()
     {
-        if (!this.isBind())
+        if (!this.isUse)
             throw new IllegalStateException("The program must be used in the current context before operating it!");
     }
 
@@ -62,20 +64,20 @@ public class ShaderProgram implements IBindable
 
     public void bind()
     {
-        if (this.isBind())
+        if (this.isUse)
             return;
 
         glUseProgram(this.id);
-        currentUseProgram = this.id;
+        this.isUse = true;
     }
 
     public void unbind()
     {
-        if (!this.isBind())
+        if (!this.isUse)
             return;
 
         glUseProgram(GL_NONE);
-        currentUseProgram = this.id;
+        this.isUse = false;
     }
 
     public void attachShader(Shader shader)
@@ -109,15 +111,9 @@ public class ShaderProgram implements IBindable
     }
 
     @Override
-    public int getCurrentBind()
-    {
-        return currentUseProgram;
-    }
-
-    @Override
     public boolean isBind()
     {
-        return this.id == currentUseProgram;
+        return this.isUse;
     }
 
     @Override
