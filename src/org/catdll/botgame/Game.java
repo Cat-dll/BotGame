@@ -1,5 +1,6 @@
 package org.catdll.botgame;
 
+import org.catdll.botgame.gfx.render.*;
 import org.catdll.botgame.time.*;
 
 public class Game implements Runnable
@@ -14,12 +15,16 @@ public class Game implements Runnable
 
     public GameWindow window;
 
+    public GameRenderer renderer;
+
     public Time time;
 
     public void init()
     {
         this.time = new Time();
+
         this.window = new GameWindow("Super Window", WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.renderer = new GameRenderer(this);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class Game implements Runnable
 
     public void render()
     {
-
+        this.renderer.render();
     }
 
     public void dispose()

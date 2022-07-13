@@ -10,18 +10,21 @@ import org.lwjgl.stb.*;
 
 
 // TODO: Implements IBindable
-public class Texture
+public class Texture implements IGLObject
 {
     private int id;
 
-    private int width;
+    private final int width;
 
-    private int height;
+    private final int height;
 
     public Texture(ByteBuffer data, int width, int height)
     {
         if (data == null)
             throw new NullPointerException("Cannot create texture! The data is invalid!");
+
+        this.width = width;
+        this.height = height;
 
         this.id = GL40.glGenTextures();
         this.bind();
@@ -68,12 +71,26 @@ public class Texture
         return texture;
     }
 
+    @Override
     public void dispose()
     {
         GL40.glDeleteTextures(this.id);
         this.id = GL_NONE;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null)
+            return false;
+
+        if (o instanceof Texture)
+            return ((Texture)o).getId() == this.id;
+
+        return false;
+    }
+
+    @Override
     public int getId()
     {
         return this.id;

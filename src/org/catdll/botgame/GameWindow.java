@@ -114,4 +114,9 @@ public class GameWindow
     {
         return this.height;
     }
+
+    public String getTitle()
+    {
+        return this.title;
+    }
 }
